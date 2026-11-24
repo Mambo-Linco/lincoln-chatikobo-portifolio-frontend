@@ -20,7 +20,7 @@ async function request(path, { method = 'GET', body, form } = {}) {
   try {
     res = await fetch(API + path, { method, headers, body: payload });
   } catch {
-    throw new Error('Cannot reach the server. Is the backend running?');
+    throw new Error('Cannot reach the server. It may be starting up (wait a minute and retry), or this website address is not listed in CLIENT_ORIGIN on the backend.');
   }
   const data = await res.json().catch(() => ({}));
   if (!res.ok) throw new Error(data.error || 'Something went wrong.');
