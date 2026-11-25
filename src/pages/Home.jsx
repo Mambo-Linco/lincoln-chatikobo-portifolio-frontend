@@ -2,17 +2,23 @@ import { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { api, photoUrl } from '../api.js';
 import ProjectCard from '../components/ProjectCard.jsx';
+import { useAuth } from '../auth.jsx';
 
 export default function Home() {
+  const { user, loading: authLoading } = useAuth();
   const [profile, setProfile] = useState(null);
   const [projects, setProjects] = useState([]);
   const [error, setError] = useState('');
 
   useEffect(() => {
-    Promise.all([api.get('/api/profile'), api.get('/api/projects')])
-      .then(([p, list]) => { setProfile(p); setProjects(list); })
+    if (authLoading) return undefined;
+    const requests = [api.get('/api/profile')];
+    if (user) requests.push(api.get('/api/projects'));
+    Promise.all(requests)
+      .then(([p, list = []]) => { setProfile(p); setProjects(list); })
       .catch((e) => setError(e.message));
-  }, []);
+    return undefined;
+  }, [authLoading, user]);
 
   if (error) return <p className="page-note error">{error}</p>;
   if (!profile) return <p className="page-note">Loading…</p>;
@@ -51,7 +57,7 @@ export default function Home() {
           <Link to="/projects">All projects</Link>
         </div>
         {shown.length === 0
-          ? <p className="empty">No projects yet. Log in as admin and choose Manage to add your first one.</p>
+          ? <div className="empty"><p>Sign in to view my projects and read the certificates attached to them.</p><Link className="btn small" to="/login">Sign in to view projects</Link></div>
           : <div className="grid">{shown.map((p) => <ProjectCard key={p.id} project={p} />)}</div>}
       </section>
     </>

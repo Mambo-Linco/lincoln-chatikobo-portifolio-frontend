@@ -47,7 +47,7 @@ export default function ProjectDetail() {
       {certificates.length > 0 && (
         <section aria-labelledby="certificates-heading">
           <h2 id="certificates-heading">Certificates</h2>
-          <p className="meta">View the uploaded certificates here. No login is needed to preview PDFs or images.</p>
+          <p className="meta">You are signed in, so you can preview these PDF and image certificates here.</p>
           <div className="certificate-list">
             {certificates.map((f) => (
               <article key={f.id} className="certificate-card">

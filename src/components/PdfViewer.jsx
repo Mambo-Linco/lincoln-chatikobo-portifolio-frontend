@@ -1,7 +1,7 @@
 import { useEffect, useRef, useState } from 'react';
 import * as pdfjs from 'pdfjs-dist';
 import workerUrl from 'pdfjs-dist/build/pdf.worker.min.mjs?url';
-import { fetchPublicPreviewBlob } from '../api.js';
+import { fetchFileBlob } from '../api.js';
 
 pdfjs.GlobalWorkerOptions.workerSrc = workerUrl;
 
@@ -21,7 +21,7 @@ export default function PdfViewer({ fileId }) {
 
     (async () => {
       try {
-        const blob = await fetchPublicPreviewBlob(fileId, controller.signal);
+        const blob = await fetchFileBlob(fileId, 'view');
         const data = await blob.arrayBuffer();
         if (cancelled) return;
         loadingTask = pdfjs.getDocument({ data });

@@ -16,14 +16,15 @@ import { useAuth } from './auth.jsx';
 
 function ScrollToTop() {
   const { pathname } = useLocation();
-  useEffect(() => {window.scrollTo(0, 0);}, [pathname]);
+  useEffect(() => {window.scrollTo(0, 0)}, [pathname]);
   return null;
 }
 
 function Guard({ allow, children }) {
   const { user, loading, isAdmin, canUpload } = useAuth();
+  const location = useLocation();
   if (loading) return <p className="page-note">Loading…</p>;
-  if (!user) return <Navigate to="/login" replace />;
+  if (!user) return <Navigate to="/login" replace state={{ from: `${location.pathname}${location.search}` }} />;
   if (allow === 'admin' && !isAdmin) return <p className="page-note">Only the admin can open this page.</p>;
   if (allow === 'upload' && !canUpload) return <p className="page-note">You do not have permission to manage projects.</p>;
   return children;
@@ -37,8 +38,8 @@ export default function App() {
       <main>
         <Routes>
           <Route path="/" element={<Home />} />
-          <Route path="/projects" element={<Projects />} />
-          <Route path="/projects/:id" element={<ProjectDetail />} />
+          <Route path="/projects" element={<Guard><Projects /></Guard>} />
+          <Route path="/projects/:id" element={<Guard><ProjectDetail /></Guard>} />
           <Route path="/login" element={<Login />} />
           <Route path="/register" element={<Register />} />
           <Route path="/admin" element={<Guard allow="upload"><AdminLayout /></Guard>}>

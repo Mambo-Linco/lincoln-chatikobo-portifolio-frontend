@@ -72,7 +72,7 @@ export default function ProjectForm() {
     try {
       const updated = await task;
       setFiles((cur) => cur.map((x) => x.id === f.id ? { ...x, ...updated } : x));
-      setNote(changes.purpose === 'certificate' ? 'Certificate now appears in the public Certificates section.' : 'File details saved.');
+      setNote(changes.purpose === 'certificate' ? 'Certificate now appears in the Certificates section for signed-in users.' : 'File details saved.');
     }
     catch (err) { setError(err.message); }
     finally {
@@ -107,7 +107,7 @@ export default function ProjectForm() {
       {id ? (
         <section>
           <h2>Certificates, pictures and documents</h2>
-          <p className="meta">Upload certificates as PDF, JPG, PNG, WEBP or GIF files. Visitors can view them without logging in; downloads still require permission. Other document types are kept for users with download access.</p>
+          <p className="meta">Upload certificates as PDF, JPG, PNG, WEBP or GIF files. Signed-in users can read them; downloads still require permission. Other document types are kept for users with download access.</p>
           <div className="row-actions">
             <label className={`btn${busy ? ' upload-disabled' : ''}`}>
               Upload certificates
