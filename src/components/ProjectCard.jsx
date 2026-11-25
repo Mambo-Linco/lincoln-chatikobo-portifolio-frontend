@@ -1,8 +1,10 @@
 import { Link } from 'react-router-dom';
 import ProtectedImage from './ProtectedImage.jsx';
+import { isCertificate } from '../utils/files.js';
 
 export default function ProjectCard({ project }) {
-  const cover = project.files.find((f) => f.kind === 'image');
+  const cover = project.files.find((f) => f.kind === 'image' && !isCertificate(f))
+    || project.files.find((f) => f.kind === 'image');
   return (
     <article className="card">
       <Link to={`/projects/${project.id}`} className="card-link">

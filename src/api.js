@@ -39,6 +39,16 @@ export const api = {
 export const fileViewUrl = (id) => `${API}/api/files/${id}/view`;
 export const photoUrl = (version) => `${API}/api/profile/photo?v=${version}`;
 
+/** Public PDF/image preview: no login token or cookie is needed. */
+export async function fetchPublicPreviewBlob(id, signal) {
+  const res = await fetch(fileViewUrl(id), { signal, credentials: 'omit' });
+  if (!res.ok) {
+    const data = await res.json().catch(() => ({}));
+    throw new Error(data.error || 'Could not load this preview.');
+  }
+  return res.blob();
+}
+
 /** Fetch a protected file with the login token (used for PDFs and downloads). */
 export async function fetchFileBlob(id, mode = 'view') {
   const token = getToken();
