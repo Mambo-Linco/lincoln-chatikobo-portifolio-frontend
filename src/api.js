@@ -1,5 +1,5 @@
 // All talking to the backend happens here.
-export const API = import.meta.env.VITE_API_URL || 'https://lincoln-chatikobo-portifolio-backend.onrender.com';
+export const API = import.meta.env.VITE_API_URL || 'http://localhost:4000';
 
 export const getToken = () => {
   try { return localStorage.getItem('token'); } catch { return null; }
